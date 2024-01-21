@@ -1,0 +1,11 @@
+<form [formGroup]="form">
+    <div formGroupName="optionalFormGroup" class="row h-100 m-5 justify-content-center">
+        <div class="col-sm-12 h-100 d-flex justify-content-center align-items-center">
+            <mat-chip-listbox multiple aria-label="selection" formControlName="optionalInfo">
+                @for (option of optionalInfoList; track option;){
+                <mat-chip-option [value]="option">{{option}}</mat-chip-option>
+                }
+            </mat-chip-listbox>
+        </div>
+    </div>
+</form>

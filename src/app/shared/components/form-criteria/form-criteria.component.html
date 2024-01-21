@@ -1,0 +1,48 @@
+<form [formGroup]="form">
+    <div formGroupName="inputFormGroup" class="row h-100 m-5 justify-content-center">
+
+        <div class="col-sm-6 px-2">
+            <mat-form-field class="example-chip-list">
+                <mat-label>Kryteria rozmowy</mat-label>
+                <mat-chip-grid  formControlName="selectedCriteria" #criteriaChipGrid aria-label="Criteria selection">
+                    @for (criteria of criteria; track criteria) {
+                    <mat-chip-row (removed)="removeCriteria(criteria)">
+                        {{criteria}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + criteria">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                    }
+                </mat-chip-grid>
+                <input placeholder="Nowe kryteria..." #criteriaInput [formControl]="criteriaCtrl"
+                    [matChipInputFor]="criteriaChipGrid" [matAutocomplete]="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addCriteria($event)" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedCriteria($event)">
+                    @for (criteria of filteredCriteria | async; track criteria) {
+                    <mat-option [value]="criteria">{{criteria}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+
+        <div class="col-sm-6 px-2">
+            <mat-form-field class="example-chip-list">
+                <mat-label>Słowa specjalne</mat-label>
+                <mat-chip-grid formControlName="specialWords" #wordChipGrid aria-label="Enter words">
+                    @for (word of specialWords; track word) {
+                    <mat-chip-row (removed)="removeSpecialWord(word)">
+                        {{word}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + word">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                    }
+                    <input placeholder="Nowe słowo..." [matChipInputFor]="wordChipGrid"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                        (matChipInputTokenEnd)="addSpecialWord($event)" />
+                </mat-chip-grid>
+            </mat-form-field>
+        </div>
+
+    </div>
+</form>
