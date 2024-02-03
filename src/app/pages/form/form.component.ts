@@ -11,6 +11,7 @@ import { FormRecordingsComponent } from '../../shared/components/form-recordings
 import { FormCriteriaComponent } from '../../shared/components/form-criteria/form-criteria.component';
 import { FormOptionalComponent } from '../../shared/components/form-optional/form-optional.component';
 import { BasicModule } from '../../shared/modules/basic.module';
+import { TranscriptionService } from '../../shared/services/transcription.service';
 
 @Component({
   selector: 'app-form',
@@ -34,7 +35,7 @@ import { BasicModule } from '../../shared/modules/basic.module';
 export class FormComponent implements OnInit {
   public mainFormGroup!: FormGroup;
 
-  constructor() {
+  constructor(private transcriptionService: TranscriptionService) {
     this.mainFormGroup = new FormGroup({
       fileFormGroup: new FormGroup({
         mp3Files: new FormControl([], Validators.required),
@@ -49,11 +50,10 @@ export class FormComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void {
-    // this.createFormGroups();
-  }
+  public ngOnInit(): void {}
 
   public submit(): void {
     console.log(this.mainFormGroup.value);
+    this.transcriptionService.submitForm(this.mainFormGroup.get('fileFormGroup')?.value.mp3Files[0]).subscribe();
   }
 }

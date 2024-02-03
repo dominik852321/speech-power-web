@@ -1,0 +1,33 @@
+<div class="col-12 h-100 d-flex justify-content-center align-items-center ">
+    <div class="col-4 text-center ">
+        <mat-card class="login-card">
+            <!-- <mat-card-header class="text-center ">
+                <mat-card-title>Login</mat-card-title>
+            </mat-card-header> -->
+            <mat-card-content class="mt-4">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <!-- <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" required />
+            <mat-error *ngIf="f.username.invalid">Username is required</mat-error>
+          </mat-form-field> -->
+                    <mat-form-field appearance="fill">
+                        <mat-label>Password</mat-label>
+                        <input matInput formControlName="password" type="password" required />
+                        <mat-error *ngIf="f['password'].invalid">Password is required</mat-error>
+                    </mat-form-field>
+
+                    <button mat-fab class="ms-3" color="primary" type="submit" [disabled]="loading" >
+                        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+                        <mat-icon *ngIf="!loading">login</mat-icon>
+                      </button>
+
+                    <!-- <button class="ms-3" mat-flat-button color="primary" type="submit" [disabled]="loading">
+                        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+                        <span *ngIf="!loading">Zaloguj</span>
+                    </button> -->
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
