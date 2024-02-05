@@ -1,11 +1,11 @@
 <div class="row h-100 justify-content-center align-items-center ">
-  <div *ngIf="mainFormGroup.value" [formGroup]="mainFormGroup" class="col-8">
+  <div *ngIf="mainFormGroup.value" [formGroup]="mainFormGroup" class="col-sm-8">
     <mat-card>
       <mat-card-content>
         <mat-stepper #stepper>
           <mat-step [stepControl]="mainFormGroup.get('fileFormGroup')!" formGroupName="fileFormGroup" label="Nagrania pracowników" state="phone">
             <app-form-recordings [form]="mainFormGroup"></app-form-recordings>
-            <div class="col-12 d-flex justify-content-end align-items-center">
+            <div class="col-sm-12 d-flex justify-content-end align-items-center">
               <button mat-fab matStepperNext color="primary">
                 <mat-icon>arrow_forward</mat-icon>
               </button>
@@ -13,7 +13,7 @@
           </mat-step>
           <mat-step [stepControl]="mainFormGroup.get('inputFormGroup')!" formGroupName="inputFormGroup"  label="Kryterium oceny" state="chat">
             <app-form-criteria [form]="mainFormGroup"></app-form-criteria>
-            <div class="col-12 d-flex justify-content-between align-items-center">
+            <div class="col-sm-12 d-flex justify-content-between align-items-center">
               <button mat-fab matStepperPrevious color="default">
                 <mat-icon>arrow_back</mat-icon>
               </button>
@@ -24,7 +24,7 @@
           </mat-step>
           <mat-step [stepControl]="mainFormGroup.get('optionalFormGroup')!" formGroupName="optionalFormGroup" label="Rozmówca" state="perm_identity" >
             <app-form-optional [form]="mainFormGroup"></app-form-optional>
-            <div class="col-12 d-flex justify-content-between align-items-center">
+            <div class="col-sm-12 d-flex justify-content-between align-items-center">
               <button mat-fab matStepperPrevious color="default">
                 <mat-icon>arrow_back</mat-icon>
               </button>

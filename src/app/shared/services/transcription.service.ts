@@ -18,12 +18,12 @@ export class TranscriptionService {
     return this.httpClient.post(url, formData);
   }
 
-  public getTranscribedFiles(): Observable<any> {
+  public getTranscribtions(): Observable<any> {
     const url = `${environment.apiUrl}/transcription`;
     return this.httpClient.get(url);
   }
 
-  public getTranscribedFilesById(id: string): Observable<any> {
+  public getTranscribtionsById(id: string): Observable<any> {
     const url = `${environment.apiUrl}/transcription/${id}`;
     return this.httpClient.get(url);
   }
