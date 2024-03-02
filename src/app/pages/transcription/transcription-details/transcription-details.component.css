@@ -1,0 +1,105 @@
+.transcription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.transcription-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.transcription-exit {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.transcription-tabs {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.transcription-tabs button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.transcription-tabs button.active {
+  color: blue;
+  font-weight: bold;
+}
+
+.transcription-content {
+  display: flex;
+  width: 100%;
+}
+
+.transcription-speaker {
+  font-weight: bold;
+  width: 15%;
+  border-right: 1px solid black;
+}
+
+.transcription-text {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  padding: 10px;
+}
+
+.transcription-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.transcription-time {
+  width: 10%;
+  font-style: italic;
+  color: gray;
+  border-right: 0.5px solid black;
+  text-align: center;
+}
+
+audio {
+  width: 75em;
+}
+
+.time-column {
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+
+.client-chip {
+  background-color: #d63384 !important;
+  margin: 3px;
+}
+
+.receptionist-chip {
+  background-color: #673ab7 !important;
+  margin: 3px;
+}
+
+:host
+  ::ng-deep
+  .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled)
+  .mdc-evolution-chip__text-label {
+  color: white !important;
+}
+
+.transcription-list {
+  height: 75vh !important;
+  overflow: overlay !important;
+}

@@ -23,8 +23,14 @@ export class TranscriptionService {
     return this.httpClient.get(url);
   }
 
-  public getTranscribtionsById(id: string): Observable<any> {
+  public getTranscribtionDetailsById(id: string): Observable<any> {
     const url = `${environment.apiUrl}/transcription/${id}`;
     return this.httpClient.get(url);
+  }
+
+  
+  public getTranscribtionAudioById(id: string): Observable<any> {
+    const url = `${environment.apiUrl}/transcription/${id}/audio`;
+    return this.httpClient.get(url, { responseType: 'blob' });
   }
 }

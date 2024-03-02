@@ -1,1 +1,67 @@
-<p>transcription-details works!</p>
+<div class="p-4">
+  <div class="container">
+    <mat-card>
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab label="O połączeniu">
+
+            <mat-list class="m-4">
+              <mat-list-item>
+                <mat-icon matListItemIcon>phone</mat-icon>
+                <div matListItemTitle>Temat</div>
+                <div matListItemLine>{{ transcriptionDetails.subject }}</div>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon matListItemIcon>date_range</mat-icon>
+                <div matListItemTitle>Data rozmowy</div>
+                <div matListItemLine>{{ transcriptionDetails.createdDateTime }}</div>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon matListItemIcon>account_circle</mat-icon>
+                <div matListItemTitle>Rozmówca</div>
+                <div matListItemLine>Katarzyna Nowak</div>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon matListItemIcon>attach_money</mat-icon>
+                <div matListItemTitle>Koszt transkrypcji</div>
+                <div matListItemLine>{{ transcriptionDetails.totalCost }}zł</div>
+              </mat-list-item>
+            </mat-list>
+
+          </mat-tab>
+          <mat-tab label="Transkrypcja">
+              <div class="col-12 d-flex align-items-center justify-content-center" style="height: 10em">
+                <audio controls [src]="transcriptionAudio"></audio>
+              </div>
+              <mat-divider></mat-divider>
+              <mat-card-content class="transcription-list">
+                <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex">
+                  <div class="col-1">
+                    @switch (line.speaker) {
+                    @case ("Client") {
+                    <mat-chip class="client-chip">Klient</mat-chip>
+                    }
+                    @case ("Receptionist") {
+                    <mat-chip class="receptionist-chip">Pracownik</mat-chip>
+                    }
+                    @case ("Machine") {
+                    <mat-chip>System</mat-chip>
+                    }
+                    @default {}
+                    }
+                  </div>
+                  <div class="col-1 time-column text-center ">
+                    <p class="text-muted ">{{ line.offset | offsetSeconds }}</p>
+                  </div>
+                  <div class="col-10">
+                    <p class="ms-3">{{ line.sentence }}</p>
+                  </div>
+                </div>
+              </mat-card-content>
+          </mat-tab>
+          <mat-tab label="Ocena"> Content 3 </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

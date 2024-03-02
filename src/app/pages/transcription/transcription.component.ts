@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../shared/modules/material.module';
 import { TranscriptionService } from '../../shared/services/transcription.service';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscriber,
+  delay,
+  first,
+  share,
+  shareReplay,
+  tap,
+} from 'rxjs';
 import { BasicModule } from '../../shared/modules/basic.module';
 import { FileSizePipe } from '../../shared/pipes/file-size.pipe';
 import { Router } from '@angular/router';
@@ -14,20 +23,24 @@ import { Router } from '@angular/router';
   styleUrl: './transcription.component.css',
 })
 export class TranscriptionComponent implements OnInit {
-  public transcriptions$: Observable<any[]>;
-  constructor(private transcriptionSerivce: TranscriptionService, private router: Router) {}
+  public transcriptions$: Observable<any>;
+
+  constructor(
+    private transcriptionSerivce: TranscriptionService,
+    private router: Router
+  ) {}
 
   public ngOnInit(): void {
     this.getTranscriptionList();
   }
 
   public getTranscriptionList(): void {
-    this.transcriptions$ = this.transcriptionSerivce.getTranscribtions();
+    this.transcriptions$ = this.transcriptionSerivce
+      .getTranscribtions()
+      .pipe(shareReplay());
   }
 
-  public deleteAll(): void {
-
-  }
+  public deleteAll(): void {}
 
   public navigateToDetails(id: string): void {
     this.router.navigate(['/transcription/details', id]);
