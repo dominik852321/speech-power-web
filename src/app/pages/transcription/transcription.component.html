@@ -1,27 +1,22 @@
+@if (transcriptions$ | async) {
 <div class="row h-100 d-flex justify-content-center align-items-center">
   <div class="col-sm-6">
+    @for (transcription of transcriptions$ |async ; track transcription) {
     <mat-list>
-      @if (transcriptions$ | async) { @for (transcription of transcriptions$ |
-      async ; track transcription) {
       <mat-list-item>
         <mat-icon matListItemIcon>record_voice_over</mat-icon>
         <div matListItemTitle>{{ transcription.description }}</div>
         <div matListItemLine>{{ transcription.subject }}</div>
         <div matListItemLine>{{ transcription.status }}</div>
         <div matListItemMeta>
-          <button
-            mat-raised-button
-            (click)="navigateToDetails(transcription.id)"
-          >
+          <button mat-raised-button (click)="navigateToDetails(transcription.id)">
             Szczegóły
           </button>
         </div>
       </mat-list-item>
       <mat-divider class="m-2"></mat-divider>
-      } } @else {
-          <mat-spinner class="mx-auto"></mat-spinner>
-      }
     </mat-list>
+    }
   </div>
 
   <div class="col-sm-3 d-flex justify-content-end">
@@ -31,3 +26,8 @@
     </button>
   </div>
 </div>
+} @else {
+<div class="row h-100 d-flex justify-content-center align-items-center">
+  <mat-spinner class="mx-auto"></mat-spinner>
+</div>
+}

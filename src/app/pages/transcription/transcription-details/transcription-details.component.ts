@@ -4,7 +4,6 @@ import { TranscriptionService } from '../../../shared/services/transcription.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { BasicModule } from '../../../shared/modules/basic.module';
-import { url } from 'inspector';
 
 @Component({
   selector: 'app-transcription-details',
@@ -42,8 +41,4 @@ export class TranscriptionDetailsComponent {
         this.transcriptionAudio = URL.createObjectURL(audio);
       })).subscribe();
   }
-
-  // public navigateToDetails(id: string): void {
-  //   this.router.navigate(['/transcription/details', id]);
-  // }
 }

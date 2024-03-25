@@ -1,0 +1,44 @@
+<div class="row h-100 justify-content-center align-items-center ">
+  <div class="col-sm-8">
+    <mat-card>
+      <mat-card-content>
+        <mat-stepper>
+          <mat-step label="Nagrania pracowników" state="phone">
+            <form [formGroup]="fileFormGroup">
+              <div class="row h-100 m-5 justify-content-center">
+                <div class="col-sm-6 h-100 d-flex justify-content-center align-items-center ">
+                  <div class="text-center ">
+                    <button mat-fab color="primary" (click)="fileInput.click()">
+                      <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <mat-divider class="m-2"></mat-divider>
+                    <h4>Wrzuć nagrania</h4>
+                    <input hidden (change)="onFileSelected($event.target)" multiple #fileInput type="file">
+                  </div>
+                </div>
+                <div *ngIf="fileFormGroup.get('mp3Files')?.value.length >0" class="col-sm-6 h-100 d-flex align-items-center">
+                  <mat-list>
+                    @for (record of fileFormGroup.get('mp3Files')?.value; track record) {
+                    <mat-list-item>
+                      <mat-icon matListItemIcon>record_voice_over</mat-icon>
+                      <div matListItemTitle>{{record.name}}</div>
+                      <div matListItemTitle>{{record.type}}</div>
+                      <div matListItemLine>{{record.size | fileSize}}</div>
+                    </mat-list-item>
+                    }
+                  </mat-list>
+                </div>
+              </div>
+            </form>
+            <div class="col-sm-12 d-flex justify-content-end align-items-center">
+              <button mat-fab extended color="primary" (click)="submit()">
+                <mat-icon>done_outline</mat-icon>
+                Prześlij
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

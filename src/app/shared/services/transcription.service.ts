@@ -9,15 +9,6 @@ import { environment } from '../environments/environment';
 export class TranscriptionService {
   constructor(private httpClient: HttpClient) {}
 
-  public submitForm(form: File): Observable<any> {
-    const url = `${environment.apiUrl}/transcription`;
-
-    const formData = new FormData();
-    formData.append('file', form);
-    formData.append('description', form.name);
-    return this.httpClient.post(url, formData);
-  }
-
   public getTranscribtions(): Observable<any> {
     const url = `${environment.apiUrl}/transcription`;
     return this.httpClient.get(url);
@@ -27,7 +18,6 @@ export class TranscriptionService {
     const url = `${environment.apiUrl}/transcription/${id}`;
     return this.httpClient.get(url);
   }
-
   
   public getTranscribtionAudioById(id: string): Observable<any> {
     const url = `${environment.apiUrl}/transcription/${id}/audio`;

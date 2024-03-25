@@ -3,13 +3,7 @@ import { MaterialModule } from '../../shared/modules/material.module';
 import { TranscriptionService } from '../../shared/services/transcription.service';
 import {
   Observable,
-  Subject,
-  Subscriber,
-  delay,
-  first,
-  share,
   shareReplay,
-  tap,
 } from 'rxjs';
 import { BasicModule } from '../../shared/modules/basic.module';
 import { FileSizePipe } from '../../shared/pipes/file-size.pipe';

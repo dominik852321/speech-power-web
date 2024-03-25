@@ -1,0 +1,63 @@
+<div class="row h-100 justify-content-center align-items-center ">
+    <div class="col-sm-8">
+        <mat-card>
+            <mat-card-content>
+                <mat-stepper>
+                    <mat-step label="Pytania i słowa specjalne" state="chat">
+                        <div class="row h-100 m-5 justify-content-center">
+                            <div class="col-sm-6 h-100 d-flex justify-content-center align-items-center px-2">
+                                <mat-form-field class="w-100">
+                                    <mat-label>Pytania do rozmowy</mat-label>
+                                    <mat-chip-grid #questionsChipGrid>
+                                        @for (question of questions; track question) {
+                                        <mat-chip-row (removed)="removeQuestions(question)">
+                                            {{question}}
+                                            <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                            </button>
+                                        </mat-chip-row>
+                                        }
+                                    </mat-chip-grid>
+                                    <input type="text" placeholder="Nowe pytanie..." autocomplete="off" #questionsInput
+                                        [matChipInputFor]="questionsChipGrid"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        (matChipInputTokenEnd)="addQuestions($event)" />
+                                        <mat-spinner *ngIf="questions === undefined" diameter="30"></mat-spinner>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-6 h-100 d-flex justify-content-center align-items-center px-2">
+                                <mat-form-field class="w-100">
+                                    <mat-label>Słowa specjalne</mat-label>
+                                    <mat-chip-grid #wordChipGrid>
+                                        @for (word of keywords; track word) {
+                                        <mat-chip-row (removed)="removeSpecialWord(word)">
+                                            {{word}}
+                                            <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                            </button>
+                                        </mat-chip-row>
+                                        }
+                                        <input placeholder="Nowe słowo..." autocomplete="off" #keywordInput
+                                            [matChipInputFor]="wordChipGrid"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            (matChipInputTokenEnd)="addSpecialWord($event)" />
+                                    </mat-chip-grid>
+                                    <mat-spinner *ngIf="keywords === undefined" diameter="30"></mat-spinner>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12 d-flex justify-content-end align-items-center">
+                            <button mat-fab extended color="primary" (click)="submit()">
+                                <mat-icon>done_outline</mat-icon>
+                                Zapisz i generuj odpowiedź
+                            </button>
+                        </div>
+                    </mat-step>
+                </mat-stepper>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

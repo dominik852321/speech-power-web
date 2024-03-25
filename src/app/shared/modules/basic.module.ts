@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { FileSizePipe } from '../pipes/file-size.pipe';
 import { SecondsMinutesPipe } from '../pipes/seconds-minutes.pipe';
 import { OffsetSecondsPipe } from '../pipes/offset-seconds.pipe';
+import { FormService } from '../services/form.service';
 
 @NgModule({
   imports:[ 
@@ -21,6 +22,6 @@ import { OffsetSecondsPipe } from '../pipes/offset-seconds.pipe';
     SecondsMinutesPipe,
     OffsetSecondsPipe
   ],
-  providers: [TranscriptionService, AuthService],
+  providers: [FormService, TranscriptionService, AuthService],
 })
 export class BasicModule {}
