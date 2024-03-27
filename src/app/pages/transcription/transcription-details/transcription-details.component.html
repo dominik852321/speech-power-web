@@ -1,3 +1,5 @@
+<div id="wavesurfer"></div>
+<!-- TODO trzeba to wsadzić do środka -->
 @if (transcriptionDetails) {
 <div class="p-4 container">
     <mat-card>
@@ -42,11 +44,11 @@
           </mat-tab>
           <mat-tab label="Transkrypcja">
             <div class="col-12 d-flex align-items-center justify-content-center" style="height: 10em">
-              <audio controls [src]="transcriptionAudio"></audio>
+              <!-- <audio controls [src]="transcriptionAudio"></audio> -->
             </div>
             <mat-divider></mat-divider>
             <mat-card-content class="transcription-list">
-              <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex">
+              <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex" [class.highlight]="line.highlight" (click)="setTime(line.offset)">
                 <div class="col-1">
                   @switch (line.speaker) {
                   @case ("Client") {

@@ -32,3 +32,8 @@ audio {
 .mdc-list-item__secondary-text{
   white-space: break-spaces !important;
 }
+
+.highlight { 
+  /* TODO ładniejsze oznaczenie */
+  outline: 2px solid red;
+}
