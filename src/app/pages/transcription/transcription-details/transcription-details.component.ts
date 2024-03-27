@@ -4,6 +4,7 @@ import { TranscriptionService } from '../../../shared/services/transcription.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { BasicModule } from '../../../shared/modules/basic.module';
+import WaveSurfer from 'wavesurfer.js'
 
 @Component({
   selector: 'app-transcription-details',
@@ -39,6 +40,19 @@ export class TranscriptionDetailsComponent {
 
       this.transcriptionSerivce.getTranscribtionAudioById(id).pipe(first(), tap(audio => {
         this.transcriptionAudio = URL.createObjectURL(audio);
+
+        const wavesurfer = WaveSurfer.create({
+          container: '#wavesurfer',
+          waveColor: 'rgb(200, 0, 200)',
+          progressColor: 'rgb(100, 0, 100)',
+          url: this.transcriptionAudio,
+          normalize: true,
+        })
+    
+        wavesurfer.on('click', () => {
+          wavesurfer.playPause()
+        })
+
       })).subscribe();
   }
 }
