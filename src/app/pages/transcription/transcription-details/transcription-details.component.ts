@@ -16,6 +16,7 @@ import WaveSurfer from 'wavesurfer.js'
 export class TranscriptionDetailsComponent {
   public transcriptionDetails: any;
   public transcriptionAudio: string;
+  public wavesurfer: any;
 
   constructor(
     private transcriptionSerivce: TranscriptionService,
@@ -41,18 +42,36 @@ export class TranscriptionDetailsComponent {
       this.transcriptionSerivce.getTranscribtionAudioById(id).pipe(first(), tap(audio => {
         this.transcriptionAudio = URL.createObjectURL(audio);
 
-        const wavesurfer = WaveSurfer.create({
+        this.wavesurfer = WaveSurfer.create({
           container: '#wavesurfer',
           waveColor: 'rgb(200, 0, 200)',
           progressColor: 'rgb(100, 0, 100)',
-          url: this.transcriptionAudio,
+          url: this.transcriptionAudio, // TODO pobieranie bezpośrednio, będzie można dzięki temu wyświetlić loader
           normalize: true,
         })
     
-        wavesurfer.on('click', () => {
-          wavesurfer.playPause()
+        this.wavesurfer.on('click', () => {
+          this.wavesurfer.playPause()
+          //TODO lepsza obsługa, może przycisk
         })
 
+        this.wavesurfer.on('timeupdate', (currentTime: number) => {
+          this.transcriptionDetails.transcriptionArray.forEach((obj: { highlight: boolean; }) => obj.highlight = false);
+
+          const activeSentence = this.transcriptionDetails.transcriptionArray.find((obj: { duration: number; offset: number; }) => 
+            currentTime > obj.duration && currentTime < (obj.duration + obj.offset)
+          )
+
+          activeSentence.highlight = true;
+        })
       })).subscribe();
-  }
+    }
+
+    setTime(offset: number): void {
+      if(typeof(this.wavesurfer) != 'undefined')
+      {
+        this.wavesurfer.setTime(offset);
+        this.wavesurfer.play();
+      }
+    }
 }
