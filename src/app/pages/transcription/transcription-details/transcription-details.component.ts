@@ -4,7 +4,7 @@ import { TranscriptionService } from '../../../shared/services/transcription.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { BasicModule } from '../../../shared/modules/basic.module';
-import WaveSurfer from 'wavesurfer.js'
+import WaveSurfer from 'wavesurfer.js';
 
 @Component({
   selector: 'app-transcription-details',
@@ -16,7 +16,8 @@ import WaveSurfer from 'wavesurfer.js'
 export class TranscriptionDetailsComponent {
   public transcriptionDetails: any;
   public transcriptionAudio: string;
-  public wavesurfer: any;
+  public wavesurfer: WaveSurfer;
+  public audioVisible = false;
 
   constructor(
     private transcriptionSerivce: TranscriptionService,
@@ -27,6 +28,11 @@ export class TranscriptionDetailsComponent {
     this.getTranscriptionList();
   }
 
+  public get wavesurferState() {
+    if (typeof this.wavesurfer == 'undefined') return false;
+    return this.wavesurfer.isPlaying();
+  }
+
   public getTranscriptionList(): void {
     this.router.params.pipe(first()).subscribe((params) => {
       this.getTranscription(params['id']);
@@ -34,44 +40,69 @@ export class TranscriptionDetailsComponent {
   }
 
   public getTranscription(id: string): void {
-      this.transcriptionSerivce.getTranscribtionDetailsById(id).pipe(first(), tap(details => {
-        this.transcriptionDetails = details;
-        this.transcriptionDetails.transcriptionArray.unshift({sentence: null, offset: 0.00, speaker: null});
-      })).subscribe();
-
-      this.transcriptionSerivce.getTranscribtionAudioById(id).pipe(first(), tap(audio => {
-        this.transcriptionAudio = URL.createObjectURL(audio);
-
-        this.wavesurfer = WaveSurfer.create({
-          container: '#wavesurfer',
-          waveColor: 'rgb(200, 0, 200)',
-          progressColor: 'rgb(100, 0, 100)',
-          url: this.transcriptionAudio, // TODO pobieranie bezpośrednio, będzie można dzięki temu wyświetlić loader
-          normalize: true,
+    this.transcriptionSerivce
+      .getTranscribtionDetailsById(id)
+      .pipe(
+        first(),
+        tap((details) => {
+          this.transcriptionDetails = details;
+          this.transcriptionDetails.transcriptionArray.unshift({
+            sentence: null,
+            offset: 0.0,
+            speaker: null,
+          });
         })
-    
-        this.wavesurfer.on('click', () => {
-          this.wavesurfer.playPause()
-          //TODO lepsza obsługa, może przycisk
+      )
+      .subscribe();
+
+    this.transcriptionSerivce
+      .getTranscribtionAudioById(id)
+      .pipe(
+        first(),
+        map((audio) => {
+          this.transcriptionAudio = URL.createObjectURL(audio);
         })
+      )
+      .subscribe(() => this.createWavesurfer());
+  }
 
-        this.wavesurfer.on('timeupdate', (currentTime: number) => {
-          this.transcriptionDetails.transcriptionArray.forEach((obj: { highlight: boolean; }) => obj.highlight = false);
+  public createWavesurfer(): void {
+    this.wavesurfer = WaveSurfer.create({
+      container: '#wavesurfer',
+      waveColor: '#e0e0e0',
+      progressColor: '#d63384',
+      url: this.transcriptionAudio,
+      normalize: true,
+    });
 
-          const activeSentence = this.transcriptionDetails.transcriptionArray.find((obj: { duration: number; offset: number; }) => 
-            currentTime > obj.duration && currentTime < (obj.duration + obj.offset)
-          )
+    this.wavesurfer.on('decode', () => {
+      this.audioVisible = true;
+    });
 
-          activeSentence.highlight = true;
-        })
-      })).subscribe();
+    this.wavesurfer.on('timeupdate', (currentTime: number) => {
+      this.transcriptionDetails.transcriptionArray.forEach(
+        (obj: { highlight: boolean }) => (obj.highlight = false)
+      );
+
+      const activeSentence = this.transcriptionDetails.transcriptionArray.find(
+        (obj: { duration: number; offset: number }) =>
+          currentTime > obj.duration && currentTime < obj.duration + obj.offset
+      );
+
+      activeSentence.highlight = true;
+    });
+  }
+
+  public setTime(offset: number): void {
+    if (typeof this.wavesurfer != 'undefined') {
+      this.wavesurfer.pause();
+      this.wavesurfer.setTime(offset);
     }
+  }
 
-    setTime(offset: number): void {
-      if(typeof(this.wavesurfer) != 'undefined')
-      {
-        this.wavesurfer.setTime(offset);
-        this.wavesurfer.play();
-      }
+  public playOrPause(): void {
+    if (typeof this.wavesurfer != 'undefined') {
+      this.wavesurfer.playPause();
     }
+  }
 }

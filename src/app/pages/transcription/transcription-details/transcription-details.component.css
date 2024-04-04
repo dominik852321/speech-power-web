@@ -3,8 +3,8 @@ audio {
 }
 
 .time-column {
-  border-right: 1px solid black;
-  border-left: 1px solid black;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .client-chip {
@@ -17,6 +17,12 @@ audio {
   margin: 3px;
 }
 
+.system-chip {
+  background-color:#e0e0e0 !important;
+  color: #212121 !important;
+  margin: 3px;
+}
+
 :host
   ::ng-deep
   .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled)
@@ -25,15 +31,23 @@ audio {
 }
 
 .transcription-list {
-  height: 70vh !important;
+  max-height: 77vh !important;
   overflow: overlay !important;
 }
 
 .mdc-list-item__secondary-text{
   white-space: break-spaces !important;
+  line-height: normal !important;
 }
 
 .highlight { 
   /* TODO ładniejsze oznaczenie */
-  outline: 2px solid red;
+  background-color: #673ab7;
+  padding: 10px;
+  border-radius: 16px;
+  color: #fff;
+}
+
+p {
+  cursor: pointer;
 }

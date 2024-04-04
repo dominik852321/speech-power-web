@@ -1,106 +1,119 @@
-<div id="wavesurfer"></div>
-<!-- TODO trzeba to wsadzić do środka -->
 @if (transcriptionDetails) {
-<div class="p-4 container">
-    <mat-card>
-      <mat-card-content>
-        <mat-tab-group>
-          <mat-tab label="O połączeniu">
+<div class="p-4 container ">
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group>
+        <mat-tab label="O połączeniu">
+          <mat-list class="m-4">
+            <mat-list-item>
+              <mat-icon matListItemIcon>phone</mat-icon>
+              <div matListItemTitle>Temat</div>
+              <div matListItemLine>{{ transcriptionDetails.subject }}</div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>date_range</mat-icon>
+              <div matListItemTitle>Data rozmowy</div>
+              <div matListItemLine>{{ transcriptionDetails.createdDateTime }}</div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>attach_money</mat-icon>
+              <div matListItemTitle>Koszt transkrypcji</div>
+              <div matListItemLine>{{ transcriptionDetails.totalCost }}zł</div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>account_circle</mat-icon>
+              <div matListItemTitle>Konsultant</div>
+              <div matListItemLine>Katarzyna Nowak</div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>star</mat-icon>
+              <div matListItemTitle>Ocena konsultanta</div>
+              <div matListItemLine>{{transcriptionDetails.consultantEvaluation}}</div>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>key</mat-icon>
+              <div matListItemTitle>Opis rozmowy w skrócie</div>
+              <div matListItemLine>{{transcriptionDetails.summary}}</div>
+            </mat-list-item>
 
-            <mat-list class="m-4">
-              <mat-list-item>
-                <mat-icon matListItemIcon>phone</mat-icon>
-                <div matListItemTitle>Temat</div>
-                <div matListItemLine>{{ transcriptionDetails.subject }}</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListItemIcon>date_range</mat-icon>
-                <div matListItemTitle>Data rozmowy</div>
-                <div matListItemLine>{{ transcriptionDetails.createdDateTime }}</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListItemIcon>attach_money</mat-icon>
-                <div matListItemTitle>Koszt transkrypcji</div>
-                <div matListItemLine>{{ transcriptionDetails.totalCost }}zł</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListItemIcon>account_circle</mat-icon>
-                <div matListItemTitle>Konsultant</div>
-                <div matListItemLine>Katarzyna Nowak</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListItemIcon>star</mat-icon>
-                <div matListItemTitle>Ocena konsultanta</div>
-                <div matListItemLine>{{transcriptionDetails.consultantEvaluation}}</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon matListItemIcon>key</mat-icon>
-                <div matListItemTitle>Opis rozmowy w skrócie</div>
-                <div matListItemLine>{{transcriptionDetails.summary}}</div>
-              </mat-list-item>
-        
-            </mat-list>
+          </mat-list>
 
-          </mat-tab>
-          <mat-tab label="Transkrypcja">
-            <div class="col-12 d-flex align-items-center justify-content-center" style="height: 10em">
-              <!-- <audio controls [src]="transcriptionAudio"></audio> -->
+        </mat-tab>
+        <mat-tab label="Transkrypcja">
+          <div class="col-12 d-flex align-items-center justify-content-center" style="height: 10em">
+            @if (audioVisible) {
+            <div class="col-12 d-flex align-items-center justify-content-center">
+              <div class="col-1">
+                <button mat-fab color="primary" (click)="playOrPause()">
+                  @if(!wavesurferState){
+                  <mat-icon>play_arrow</mat-icon>
+                  } @else {
+                  <mat-icon>pause</mat-icon>
+                  }
+                </button>
+              </div>
+              <div class="col-8" id="wavesurfer"></div>
             </div>
-            <mat-divider></mat-divider>
-            <mat-card-content class="transcription-list">
-              <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex" [class.highlight]="line.highlight" (click)="setTime(line.offset)">
-                <div class="col-1">
-                  @switch (line.speaker) {
-                  @case ("Client") {
-                  <mat-chip class="client-chip">Klient</mat-chip>
-                  }
-                  @case ("Receptionist") {
-                  <mat-chip class="receptionist-chip">Pracownik</mat-chip>
-                  }
-                  @case ("Machine") {
-                  <mat-chip>System</mat-chip>
-                  }
-                  @default {}
-                  }
-                </div>
-                <div class="col-1 time-column text-center ">
-                  <p class="text-muted ">{{ line.offset | offsetSeconds }}</p>
-                </div>
-                <div class="col-10">
-                  <p class="ms-3">{{ line.sentence }}</p>
-                </div>
+            } @else {
+            <mat-spinner diameter="60" class="mx-auto"></mat-spinner>
+            }
+          </div>
+          <mat-divider></mat-divider>
+          <mat-card-content class="transcription-list">
+            <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex"
+              (click)="setTime(line.offset)">
+              <div class="col-1">
+                @switch (line.speaker) {
+                @case ("Client") {
+                <mat-chip class="client-chip">Klient</mat-chip>
+                }
+                @case ("Receptionist") {
+                <mat-chip class="receptionist-chip">Pracownik</mat-chip>
+                }
+                @case ("Machine") {
+                <mat-chip class="system-chip">System</mat-chip>
+                }
+                @default {}
+                }
               </div>
-            </mat-card-content>
-          </mat-tab>
-          <mat-tab label="Podsumowanie">
-            <div class="row">
-              <div class="col-6">
-                <mat-list class="m-4">
-                  @for (question of transcriptionDetails.questionResults; track question) {
-                  <mat-list-item>
-                    <mat-icon matListItemIcon
-                      [ngStyle]="question.answer ? { 'color': '#673ab7' } : { 'color': '#f44336' }">{{question.answer ?
-                      'done' : 'close' }}</mat-icon>
-                    <div matListItemTitle>{{question.question}}</div>
-                  </mat-list-item>
-                  }
-                </mat-list>
+              <div class="col-1 time-column text-center">
+                <p class="text-muted">{{ line.offset | offsetSeconds }}</p>
               </div>
-              <div class="col-6">
-                <div class="col-sm-12 h-100 d-flex justify-content-center align-items-center">
-                  <mat-chip-set>
-                    @for (keyword of transcriptionDetails.keywordResults; track keyword) {
-                    <mat-chip
-                      [ngStyle]="keyword.answer ? { 'background-color': '#673ab7' } : {}">{{keyword.question}}</mat-chip>
-                    }
-                  </mat-chip-set>
-                </div>
+              <div class="col-10">
+                <p class="ms-3 d-inline " [class.highlight]="line.highlight">{{ line.sentence }}</p>
               </div>
             </div>
-          </mat-tab>
-        </mat-tab-group>
-      </mat-card-content>
-    </mat-card>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Podsumowanie">
+          <div class="row">
+            <div class="col-6">
+              <mat-list class="m-4">
+                @for (question of transcriptionDetails.questionResults; track question) {
+                <mat-list-item>
+                  <mat-icon matListItemIcon
+                    [ngStyle]="question.answer ? { 'color': '#673ab7' } : { 'color': '#f44336' }">{{question.answer ?
+                    'done' : 'close' }}</mat-icon>
+                  <div matListItemTitle>{{question.question}}</div>
+                </mat-list-item>
+                }
+              </mat-list>
+            </div>
+            <div class="col-6">
+              <div class="col-sm-12 h-100 d-flex justify-content-center align-items-center">
+                <mat-chip-set>
+                  @for (keyword of transcriptionDetails.keywordResults; track keyword) {
+                  <mat-chip
+                    [ngStyle]="keyword.answer ? { 'background-color': '#673ab7' } : {}">{{keyword.question}}</mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 </div>
 } @else {
 <div class="row h-100 d-flex justify-content-center align-items-center">
