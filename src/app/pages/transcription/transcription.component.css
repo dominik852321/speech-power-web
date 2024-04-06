@@ -1,0 +1,4 @@
+.transcription-list-info{
+    max-height: calc(100vh - 50px);
+    overflow-y: auto;
+}

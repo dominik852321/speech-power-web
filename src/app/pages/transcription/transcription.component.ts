@@ -3,6 +3,7 @@ import { MaterialModule } from '../../shared/modules/material.module';
 import { TranscriptionService } from '../../shared/services/transcription.service';
 import {
   Observable,
+  map,
   shareReplay,
 } from 'rxjs';
 import { BasicModule } from '../../shared/modules/basic.module';
@@ -34,7 +35,9 @@ export class TranscriptionComponent implements OnInit {
       .pipe(shareReplay());
   }
 
-  public deleteAll(): void {}
+  public deleteAll(): void {
+    this.transcriptionSerivce.deleteAllTranscription().subscribe();
+  }
 
   public navigateToDetails(id: string): void {
     this.router.navigate(['/transcription/details', id]);

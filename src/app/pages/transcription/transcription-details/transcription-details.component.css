@@ -31,8 +31,12 @@ audio {
 }
 
 .transcription-list {
-  max-height: 70vh !important;
+  max-height: calc(100vh - 270px) !important;
   overflow: overlay !important;
+}
+
+.information-tab {
+  max-height: calc(100vh - 180px) !important;
 }
 
 .mdc-list-item__secondary-text{
@@ -41,7 +45,6 @@ audio {
 }
 
 .highlight { 
-  /* TODO ładniejsze oznaczenie */
   background-color: #673ab7;
   padding: 10px;
   border-radius: 16px;

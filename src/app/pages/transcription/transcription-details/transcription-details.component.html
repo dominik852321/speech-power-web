@@ -1,10 +1,10 @@
 @if (transcriptionDetails) {
-<div class="p-4 container ">
+<div class="p-4 container">
   <mat-card>
     <mat-card-content>
-      <mat-tab-group>
+      <mat-tab-group (selectedTabChange)="onTabChange($event)">
         <mat-tab label="O połączeniu">
-          <mat-list class="m-4">
+          <mat-list class="m-4 information-tab">
             <mat-list-item>
               <mat-icon matListItemIcon>phone</mat-icon>
               <div matListItemTitle>Temat</div>
@@ -38,48 +38,48 @@
           </mat-list>
         </mat-tab>
         <mat-tab label="Transkrypcja">
-          <div class="col-12 d-flex align-items-center justify-content-center" style="height: 10em">
-            @if(!audioVisible) {
-            <mat-spinner diameter="60" class="mx-auto"></mat-spinner>
-            }
-            
-            <div class="col-1">
-              <button [hidden]="!audioVisible" mat-fab color="primary" (click)="playOrPause()">
-                @if(!wavesurferState){
-                <mat-icon>play_arrow</mat-icon>
-                } @else {
-                <mat-icon>pause</mat-icon>
-                }
-              </button>
-            </div>
-            <div [hidden]="!audioVisible" class="col-8" id="wavesurfer"></div>
-          </div>
-          <mat-divider></mat-divider>
-          <mat-card-content class="transcription-list">
-            <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex"
-              (click)="setTime(line.offset)">
+            <div class="col-12 d-flex align-items-center justify-content-center " style="height: 10em;">
+              @if(!audioVisible) {
+              <mat-spinner diameter="60" class="mx-auto"></mat-spinner>
+              }
+
               <div class="col-1">
-                @switch (line.speaker) {
-                @case ("Client") {
-                <mat-chip class="client-chip">Klient</mat-chip>
-                }
-                @case ("Receptionist") {
-                <mat-chip class="receptionist-chip">Pracownik</mat-chip>
-                }
-                @case ("Machine") {
-                <mat-chip class="system-chip">System</mat-chip>
-                }
-                @default {}
-                }
+                <button [hidden]="!audioVisible" mat-fab color="primary" (click)="playOrPause()">
+                  @if(!wavesurferState){
+                  <mat-icon>play_arrow</mat-icon>
+                  } @else {
+                  <mat-icon>pause</mat-icon>
+                  }
+                </button>
               </div>
-              <div class="col-1 time-column text-center">
-                <p class="text-muted">{{ line.offset | offsetSeconds }}</p>
-              </div>
-              <div class="col-10">
-                <p class="ms-3 d-flex " [class.highlight]="line.highlight">{{ line.sentence }}</p>
-              </div>
+              <div [hidden]="!audioVisible" class="col-8" id="wavesurfer"></div>
             </div>
-          </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-content class="transcription-list">
+              <div *ngFor="let line of transcriptionDetails.transcriptionArray" class="d-flex"
+                (click)="setTime(line.offset)">
+                <div class="col-1">
+                  @switch (line.speaker) {
+                  @case ("Client") {
+                  <mat-chip class="client-chip">Klient</mat-chip>
+                  }
+                  @case ("Receptionist") {
+                  <mat-chip class="receptionist-chip">Pracownik</mat-chip>
+                  }
+                  @case ("Machine") {
+                  <mat-chip class="system-chip">System</mat-chip>
+                  }
+                  @default {}
+                  }
+                </div>
+                <div class="col-1 time-column text-center">
+                  <p class="text-muted">{{ line.offset | offsetSeconds }}</p>
+                </div>
+                <div class="col-10">
+                  <p class="ms-3 d-flex " [class.highlight]="line.highlight">{{ line.sentence }}</p>
+                </div>
+              </div>
+            </mat-card-content>
         </mat-tab>
         <mat-tab label="Podsumowanie">
           <div class="row">

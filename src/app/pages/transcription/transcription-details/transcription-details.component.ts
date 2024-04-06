@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { BasicModule } from '../../../shared/modules/basic.module';
 import WaveSurfer from 'wavesurfer.js';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-transcription-details',
@@ -15,7 +16,7 @@ import WaveSurfer from 'wavesurfer.js';
 })
 export class TranscriptionDetailsComponent {
   public transcriptionDetails: any;
-  public transcriptionAudio: string;
+  public transcriptionAudio: Observable<Blob>;
   public wavesurfer: WaveSurfer;
   public audioVisible = false;
 
@@ -55,15 +56,9 @@ export class TranscriptionDetailsComponent {
       )
       .subscribe();
 
-    this.transcriptionSerivce
+    this.transcriptionAudio = this.transcriptionSerivce
       .getTranscribtionAudioById(id)
-      .pipe(
-        first(),
-        map((audio) => {
-          this.transcriptionAudio = URL.createObjectURL(audio);
-        })
-      )
-      .subscribe(() => this.createWavesurfer());
+      .pipe(first());
   }
 
   public createWavesurfer(): void {
@@ -71,9 +66,12 @@ export class TranscriptionDetailsComponent {
       container: '#wavesurfer',
       waveColor: '#e0e0e0',
       progressColor: '#d63384',
-      url: this.transcriptionAudio,
-      normalize: true,
+      normalize: false,
     });
+
+    this.transcriptionAudio
+      .pipe(map((blob) => this.wavesurfer.loadBlob(blob)))
+      .subscribe();
 
     this.wavesurfer.on('decode', () => {
       this.audioVisible = true;
@@ -86,10 +84,12 @@ export class TranscriptionDetailsComponent {
 
       const activeSentence = this.transcriptionDetails.transcriptionArray.find(
         (obj: { duration: number; offset: number }) =>
-          currentTime > obj.duration && currentTime < obj.duration + obj.offset
+          currentTime >= obj.offset && currentTime <= obj.duration + obj.offset
       );
 
-      activeSentence.highlight = true;
+      if (activeSentence) {
+        activeSentence.highlight = true;
+      }
     });
   }
 
@@ -104,5 +104,9 @@ export class TranscriptionDetailsComponent {
     if (typeof this.wavesurfer != 'undefined') {
       this.wavesurfer.playPause();
     }
+  }
+
+  public onTabChange(event: MatTabChangeEvent) {
+    if (event.index === 1 && typeof this.wavesurfer == 'undefined') this.createWavesurfer();
   }
 }
